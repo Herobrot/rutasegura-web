@@ -18,8 +18,7 @@ jobs:
       with:
         host: ec2-52-3-173-240.compute-1.amazonaws.com
         username: ubuntu
-        key: |
-         -----BEGIN RSA PRIVATE KEY-----
+        key: -----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAgZtk03ENDS/6+yUhcaypIDaomGrqXHPcXWe5tUEL6gmIXqOk
 qHHnRJER2WwTDtGhF//ToIOFpqzeRAkx+CFv5VC2CFXsBrXaxdNT7trjqyc4fniu
 OcPQ/QSXI/3UcpnO7w35kNf00OchxGdpj8y/djmuOOpSJMoUheqUZLafGWi3EXOt
