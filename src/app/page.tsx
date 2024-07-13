@@ -52,7 +52,7 @@ const Login: React.FC = () => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Éxito',
-                    text: 'Inicio de sesión exitoso.',
+                    text: 'Inicio de sesión exitoso de conductor.',
                 }).then((result) => {
                     if (result.isConfirmed || result.isDismissed) {
                         window.location.href = "/Perfil";
