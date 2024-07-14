@@ -26,5 +26,5 @@ jobs:
                    npm install
                     npm run build
                       pm2 stop all
-                        pm2 start npm --name "rutasegura-web" -- run dev -p 3000
+                        pm2 start npm --name "rutasegura-web" -- run dev 
                            sudo systemctl restart nginx
