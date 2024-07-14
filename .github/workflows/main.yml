@@ -40,8 +40,10 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/rutasegura-web
-            git pull origin master
-            npm install --production
-            pm2 restart all
-            sudo systemctl restart nginx
+                   cd /home/ubuntu/next-emenu
+                   git pull origin master
+                   npm install
+                    npm run build
+                      pm2 stop all
+                        pm2 start npm --name "next-emenu" -- start -p 3000
+                           sudo systemctl restart nginx
