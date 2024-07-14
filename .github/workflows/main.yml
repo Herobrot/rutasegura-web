@@ -24,20 +24,24 @@ jobs:
         with:
           host: ec2-52-3-173-240.compute-1.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}  # Asegúrate de configurar correctamente este secreto
+          key: ${{ secrets.EC2_KEY }}
           port: 22
           source: .next/
           target: /home/ubuntu/html
           overwrite: true
           strip_components: 1
-          debug: true  # Habilitar depuración para obtener más detalles
+          debug: true
 
-      - name: SSH into EC2 and restart NGINX
+      - name: SSH into EC2 and deploy
         uses: appleboy/ssh-action@master
         with:
           host: ec2-52-3-173-240.compute-1.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}  # Asegúrate de configurar correctamente este secreto
+          key: ${{ secrets.EC2_KEY }}
           port: 22
           script: |
+            cd /home/ubuntu/rutasegura-web
+            git pull origin master
+            npm install --production
+            pm2 restart all
             sudo systemctl restart nginx
