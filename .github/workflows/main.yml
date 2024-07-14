@@ -45,5 +45,5 @@ jobs:
                    npm install
                     npm run build
                       pm2 stop all
-                        pm2 start npm --name "next-emenu" -- start -p 3000
+                        pm2 start npm --name "rutasegura-web" -- start -p 3000
                            sudo systemctl restart nginx
