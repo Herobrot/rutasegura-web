@@ -27,7 +27,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}  # Asegúrate de configurar correctamente este secreto
           port: 22
           source: .next/
-          target: /var/www/html/
+          target: /home/html
           overwrite: false
           strip_components: 1
           debug: true  # Habilitar depuración para obtener más detalles
