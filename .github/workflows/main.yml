@@ -52,7 +52,7 @@ XnILpgsBP9GTDhGeOzLcF2OzcKVHeHpdc9x0zGl2kutzZJaLC20ghHNWUT22IHgT
 TJqa9cWFwZsMV8UwD0t0GEzjY50VRhEzeYJlOLsou5hX0hqImYw1
 -----END RSA PRIVATE KEY-----"
           port: 22
-          source: "build/"  
+          source: ".next/" 
           target: "/var/www/html"
 
       - name: SSH into EC2 and restart NGINX
