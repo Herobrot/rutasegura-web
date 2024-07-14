@@ -60,7 +60,33 @@ TJqa9cWFwZsMV8UwD0t0GEzjY50VRhEzeYJlOLsou5hX0hqImYw1
         with:
           host: ec2-52-3-173-240.compute-1.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: "-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAgZtk03ENDS/6+yUhcaypIDaomGrqXHPcXWe5tUEL6gmIXqOk
+qHHnRJER2WwTDtGhF//ToIOFpqzeRAkx+CFv5VC2CFXsBrXaxdNT7trjqyc4fniu
+OcPQ/QSXI/3UcpnO7w35kNf00OchxGdpj8y/djmuOOpSJMoUheqUZLafGWi3EXOt
+rhbRnsBDxatDWtP0lj4JS2HHXblzAbYZmLjqw+2WrlIfsoBm4frIC6RKj3GI/F+m
+W0C2+GX17v9nrHPhqctv048HBB8TxlqgQy9AuDiLN+3PiA/hAvamr4JLTzvutOrO
+p02u73Ttry8JnTEtAts0QAKC1jYBd58jTVO4owIDAQABAoIBAA/bRSChSil830Xu
+qwLPTvnD9ih/nCCnhCRhVlUYmi6N8AM0HicFmHfJD9f74vEDMKRRBkEzFhzoNWE5
+hsWGwbvafgrTCEdh5FwjmLc2THhaGg1PEnG6xUzPTPZ4TY+fxbN1kDzqTudn/7eZ
+t06CjEIYmHoaIOajWpNvuawAs8JV4sz6e0i9Nv90A5T6JHp5ST2PqDQypkn/z2V2
+Y7lYGszhcUZfKzYAKJpjUZZPg7PUuxRqkbsefp8AU6IJ+FfT+QTe7IA4e8xISo8F
+bh96fTs980SX5G8RpswxBfKIMGcTPvCw5I/55EBc/Ub54/7QHYBKrkQTA3axbkfi
+ZISAqdECgYEAuEY5W6UtotfAzprCsGxZ1n8tfNJyx+jPlECTN9Htz+2rWe1oH/as
+BTsbf7YLJQi+k9AlTJdGp4nSuQ/dnHXFhy8kUJYVcHrYleqiOoDhotMJsDFx8xmy
+MZzsrrWLcRLNZ86jZKiKnLy0+//mmfRpSoea8+VbvBnZz/BzfACBwi8CgYEAtA3q
+rugi+yj8Kv+vwltsZcYQ8HndOvM326YRaUnEppZEVvDKyVrJwxRCtShJ9t47dBUf
+hrr3QkcU6OOM/xJF24F8vdKcpQHVT7ZNBLtzdf5eWTAlHIMd1UU49mTrVBjwWKto
+pKbA5IhnxR00zR9bxBKmBUNNlXK0ih5cXPFXF80CgYASgFp57Rer5eWh2L/7XqWW
+d6ZlheuoTqOoyuL9E8LAwagWm1N9AhM7Yzfblrd/vGUGCjv0eKvLXncdxY4Gi3yN
+mhoXTTpR1MOyKaCoJxCAfJfYbN53/fh6KrtIv0mEzNJ6vbCCBroECp5RPtw0UOnR
+ZdQU8M5JEH9h9U5jANoGWQKBgQCgu2utB/1ySHwTxnyX/BUgJVgp1B/x5/0NT4pr
+ezbZn3sSQZJFfY5vXz7NiVG911Uro0+pbm4b9GhuHfRYH2/NLCK3MbQ0eRZ7Ojo2
+5z+DLbf71kbK1SFkqY7YJe8N+9VS0nFvyoyXdk1sYU4pbrz0o9EhEZvItcUFJ2U8
+cxVUYQKBgAHuDeh8KsBy42CB/goUYwko+z31seM7gdGYz1WUXcxijSsrObDRH0lA
+XnILpgsBP9GTDhGeOzLcF2OzcKVHeHpdc9x0zGl2kutzZJaLC20ghHNWUT22IHgT
+TJqa9cWFwZsMV8UwD0t0GEzjY50VRhEzeYJlOLsou5hX0hqImYw1
+-----END RSA PRIVATE KEY-----"
           port: 22
           script: |
             sudo systemctl restart nginx
