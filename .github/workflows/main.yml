@@ -19,17 +19,17 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy using SFTP
-        uses: jakejarvis/sftp-sync-action@1.0.0
+      - name: Deploy using SCP
+        uses: appleboy/scp-action@master
         with:
           host: ec2-52-3-173-240.compute-1.amazonaws.com
-          port: 22
           username: ubuntu
-          privateKey: ${{ secrets.EC2_KEY }}  # Asegúrate de configurar correctamente este secreto
-          localDir: .next/
-          remoteDir: /var/www/html/
-          args: -avz --no-perms  # Opciones adicionales de rsync
-          concurrency: 5  # Número máximo de conexiones concurrentes
+          key: ${{ secrets.EC2_KEY }}  # Asegúrate de configurar correctamente este secreto
+          port: 22
+          source: .next/
+          target: /var/www/html/
+          overwrite: true
+          strip_components: 1
           debug: true  # Habilitar depuración para obtener más detalles
 
       - name: SSH into EC2 and restart NGINX
