@@ -24,7 +24,7 @@ jobs:
         with:
           host: ec2-52-3-173-240.compute-1.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          key: ${{ secrets.EC2_KEY }}
           port: 22
           source: "build/"  
           target: "/var/www/html"
