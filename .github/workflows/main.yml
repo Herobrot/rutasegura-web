@@ -26,8 +26,9 @@ jobs:
           port: 22
           source: .next/
           target: /var/www/html
-          overwrite: true  # Opcional, dependiendo de tus necesidades
-
+          overwrite: true
+        env:
+          DEBUG: true 
       - name: SSH into EC2 and restart NGINX
         uses: appleboy/ssh-action@master
         with:
