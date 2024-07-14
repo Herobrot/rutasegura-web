@@ -40,7 +40,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: 22
           script: |
-                   cd /home/ubuntu/next-emenu
+                   cd /home/ubuntu/rutasegura-web
                    git pull origin master
                    npm install
                     npm run build
