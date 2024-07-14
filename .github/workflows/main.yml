@@ -28,7 +28,7 @@ jobs:
           port: 22
           source: .next/
           target: /var/www/html/
-          overwrite: true
+          overwrite: false
           strip_components: 1
           debug: true  # Habilitar depuración para obtener más detalles
 
