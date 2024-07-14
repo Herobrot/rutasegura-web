@@ -22,8 +22,8 @@ jobs:
       - name: Transfer files to EC2
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
+          host: ec2-52-3-173-240.compute-1.amazonaws.com
+          username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: 22
           source: "build/"  
