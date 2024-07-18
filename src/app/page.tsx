@@ -13,12 +13,87 @@ interface Credentials {
 
 const Login: React.FC = () => {
     const [credentials, setCredentials] = useState<Credentials>({ password: '', nickname: '' });
+    const [registerForm, setRegisterForm] = useState({
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setCredentials({ ...credentials, [name]: value });
     };
 
+    const handleRegisterInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setRegisterForm({ ...registerForm, [name]: value });
+    };
+
+    const register = () => {
+        const { email, password, confirmPassword } = registerForm;
+
+        if (password !== confirmPassword) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Las contraseñas no coinciden.',
+            });
+            return;
+        }
+
+        if (password.length < 4) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La contraseña debe tener al menos 4 caracteres.',
+            });
+            return;
+        }
+
+        fetch(`${process.env.NEXT_PUBLIC_APIURL}/user/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: registerForm.email,
+                password: registerForm.password
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                clearAuthData();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Registro fallido.',
+                });
+            } else {
+                console.log(data);
+                const objectUser = { token: data.token, _idUser: data.user._id };
+                saveAuthData(objectUser);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'Registro exitoso.',
+                }).then((result) => {
+                    if (result.isConfirmed || result.isDismissed) {
+                        // Redirigir a la página de perfil o a donde sea necesario
+                        window.location.href = "/admin";
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema con la petición.',
+            });
+        });
+    };
     const login = () => {
         if (credentials.password.length < 4) {
             Swal.fire({
@@ -29,7 +104,7 @@ const Login: React.FC = () => {
             return;
         }
 
-        fetch(`${process.env.NEXT_PUBLIC_APIURL}/paciente/login`, {
+        fetch(`${process.env.NEXT_PUBLIC_APIURL}/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -55,7 +130,7 @@ const Login: React.FC = () => {
                     text: 'Inicio de sesión exitoso de conductor.',
                 }).then((result) => {
                     if (result.isConfirmed || result.isDismissed) {
-                        window.location.href = "/Perfil";
+                        window.location.href = "/admin";
                     }
                 });
             }
@@ -76,10 +151,10 @@ const Login: React.FC = () => {
             <div className="signup">
                 <div>
                     <label htmlFor="chk" aria-hidden="true">Registrarse</label>
-                    <input type="email" name="email-R" placeholder="Email" autoComplete="off" />
-                    <input type="password" name="pswd-R" placeholder="Contraseña" />
-                    <input type="password" name="pswd-R2" placeholder="Confirmar contraseña" />
-                    <button>Registrarse</button>
+                    <input type="email" name="email" placeholder="Email" autoComplete="off" onChange={handleRegisterInputChange} />
+                    <input type="password" name="password" placeholder="Contraseña" onChange={handleRegisterInputChange} />
+                    <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" onChange={handleRegisterInputChange} />
+                    <button onClick={register}>Registrarse</button>
                 </div>
             </div>
 
