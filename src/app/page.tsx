@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import Swal from 'sweetalert2';
 import { faArrowsDownToLine } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,10 +14,12 @@ interface Credentials {
 const Login: React.FC = () => {
     const [credentials, setCredentials] = useState<Credentials>({ password: '', nickname: '' });
     const [registerForm, setRegisterForm] = useState({
+        name: '',
         email: '',
         password: '',
         confirmPassword: ''
     });
+    const [registering, setRegistering] = useState(false); // Estado para controlar el registro en curso
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -29,8 +31,12 @@ const Login: React.FC = () => {
         setRegisterForm({ ...registerForm, [name]: value });
     };
 
-    const register = () => {
-        const { email, password, confirmPassword } = registerForm;
+    const handleRegisterSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if (registering) return; // Evitar envíos múltiples
+
+        const { name, email, password, confirmPassword } = registerForm;
 
         if (password !== confirmPassword) {
             Swal.fire({
@@ -50,19 +56,25 @@ const Login: React.FC = () => {
             return;
         }
 
+        setRegistering(true); // Iniciar proceso de registro
+
         fetch(`${process.env.NEXT_PUBLIC_APIURL}/user/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: registerForm.email,
-                password: registerForm.password
+                nombre: name,
+                correo: email,
+                password
             })
         })
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
+            setRegistering(false); 
+            console.log(data);
+
+            if (!data) {
                 clearAuthData();
                 Swal.fire({
                     icon: 'error',
@@ -71,7 +83,7 @@ const Login: React.FC = () => {
                 });
             } else {
                 console.log(data);
-                const objectUser = { token: data.token, _idUser: data.user._id };
+                const objectUser = { token: data.token, _idUser: data._id };
                 saveAuthData(objectUser);
                 Swal.fire({
                     icon: 'success',
@@ -79,13 +91,13 @@ const Login: React.FC = () => {
                     text: 'Registro exitoso.',
                 }).then((result) => {
                     if (result.isConfirmed || result.isDismissed) {
-                        // Redirigir a la página de perfil o a donde sea necesario
                         window.location.href = "/admin";
                     }
                 });
             }
         })
         .catch(error => {
+            setRegistering(false);
             console.error('Error:', error);
             Swal.fire({
                 icon: 'error',
@@ -94,7 +106,10 @@ const Login: React.FC = () => {
             });
         });
     };
-    const login = () => {
+
+    const handleLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
         if (credentials.password.length < 4) {
             Swal.fire({
                 icon: 'error',
@@ -149,25 +164,26 @@ const Login: React.FC = () => {
         <main>
             <input type="checkbox" id="chk" aria-hidden="false" />
             <div className="signup">
-                <div>
+                <form onSubmit={handleRegisterSubmit}>
                     <label htmlFor="chk" aria-hidden="true">Registrarse</label>
                     <input type="email" name="email" placeholder="Email" autoComplete="off" onChange={handleRegisterInputChange} />
+                    <input type='text' name='name' placeholder='Nombre' onChange={handleRegisterInputChange} />
                     <input type="password" name="password" placeholder="Contraseña" onChange={handleRegisterInputChange} />
                     <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" onChange={handleRegisterInputChange} />
-                    <button onClick={register}>Registrarse</button>
-                </div>
+                    <button type="submit" disabled={registering}>Registrarse</button>
+                </form>
             </div>
 
             <div className="login">
-                <div>
+                <form onSubmit={handleLoginSubmit}>
                     <label htmlFor="chk" aria-hidden="true">Iniciar sesión</label>
-                    <input type="email" name="email-L" placeholder="Email" autoComplete="off" onChange={handleInputChange} />
+                    <input type="email" name="nickname" placeholder="Nickname" autoComplete="off" onChange={handleInputChange} />
                     <input type="password" name="password" placeholder="Password" onChange={handleInputChange} />
-                    <button onClick={login}>Login</button>
+                    <button type="submit">Login</button>
                     <label htmlFor="chk" aria-hidden="true">
                         <FontAwesomeIcon icon={faArrowsDownToLine} />
                     </label>
-                </div>
+                </form>
             </div>
         </main>
     );

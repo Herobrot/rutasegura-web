@@ -51,7 +51,7 @@ const dataset = [
   },
 ];
 
-import grafico from "../../assets/graficaBarras.png";
+import grafico from "../assets/graficaBarras.png";
 
 const valueFormatter = (value:any) => `$${value}`;
 

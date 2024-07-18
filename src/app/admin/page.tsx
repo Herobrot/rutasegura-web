@@ -3,10 +3,10 @@ import NavBar from "./components/NavBar";
 import Card from "./components/Card";
 import Grafica from "./components/Grafica";
 
-import efectivo from '../assets/efectivo.png'
-import colectivo from '../assets/colectivo.png'
-import cursor from '../assets/cursor.png'
-import volante from '../assets/volante.png'
+import efectivo from './assets/efectivo.png'
+import colectivo from './assets/colectivo.png'
+import cursor from './assets/cursor.png'
+import volante from './assets/volante.png'
 
 const cardItems = [
   { titulo: "Ganancias totales", valor: "$12,500", image: efectivo },
