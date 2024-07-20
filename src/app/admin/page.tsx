@@ -2,6 +2,7 @@
 import NavBar from "./components/NavBar";
 import Card from "./components/Card";
 import Grafica from "./components/Grafica";
+import Tabla from "./components/Tabla";
 
 import efectivo from './assets/efectivo.png'
 import colectivo from './assets/colectivo.png'
@@ -32,6 +33,7 @@ export default function App() {
           }
         </div>
         <Grafica />
+        <Tabla />
       </div>
     </div>
   );
