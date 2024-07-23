@@ -1,4 +1,4 @@
-import "../globals.css";
+import "./globals.css";
 import { ReactNode } from "react";
 
 interface RootLayoutProps {
@@ -6,16 +6,16 @@ interface RootLayoutProps {
 }
 
 export const metadata = {
-  title: "Admin",
-  description: "Dueño de la unidad"
+  title: "Inicio",
+  description: "Página de autentificación"
 };
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <>
-      {children}
-    </>
-  );
+  <>
+    {children}
+  </>
+  )
 };
 
 export default RootLayout;

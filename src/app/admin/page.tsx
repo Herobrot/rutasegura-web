@@ -11,20 +11,21 @@ import volante from './assets/volante.png'
 
 const cardItems = [
   { titulo: "Ganancias totales", valor: "$12,500", image: efectivo },
-  { titulo: "Vahiculos activos", valor: "20", image: colectivo },
+  { titulo: "Vehiculos activos", valor: "20", image: colectivo },
   { titulo: "Viajes de la semana", valor: "125", image: cursor },
   { titulo: "Conductores", valor: "19", image: volante },
 ];
 
 export default function App() {
   return (
-    <div className="w-auto">
+    <div id="estadistica_id" className="w-auto">
       <NavBar />
-      <div className="px-20 pt-10">
+      <div className="px-20 pt-20">
         <div className="grid grid-cols-2 gap-10">
           {
             cardItems.map(( {titulo, valor, image}, index ) => (
               <Card
+                key={index}
                 titulo={titulo}
                 valor={valor}
                 image={image}

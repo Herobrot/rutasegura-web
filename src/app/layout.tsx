@@ -6,8 +6,8 @@ interface RootLayoutProps {
 }
 
 export const metadata = {
-  title: "Inicio",
-  description: "Página de autentificación"
+  title: "Ruta Segura",
+  description: "Ruta Segura es una aplicación que te permite compartir tu ubicación en tiempo real con tus seres queridos.",
 };
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
