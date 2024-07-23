@@ -5,6 +5,7 @@ import { faArrowsDownToLine } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { saveAuthData, clearAuthData } from "./token";
 import "./inicio.css";
+import Navbar from '../components/Navbar';
 
 interface Credentials {
     password: string;
@@ -161,7 +162,8 @@ const Login: React.FC = () => {
     };
 
     return (
-        <main>
+        <><main>
+            <Navbar></Navbar>
             <input type="checkbox" id="chk" aria-hidden="false" />
             <div className="signup">
                 <form onSubmit={handleRegisterSubmit}>
@@ -185,7 +187,7 @@ const Login: React.FC = () => {
                     </label>
                 </form>
             </div>
-        </main>
+        </main></>
     );
 };
 
