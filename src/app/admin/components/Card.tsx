@@ -1,7 +1,7 @@
 
-export const Card = ({ titulo, valor, image }:any) => {
+export const Card = ({ id, titulo, valor, image }:any) => {
     return (
-      <div className="shadow shadow-gray-400 rounded p-5">
+      <div key={id} className="shadow shadow-gray-400 rounded p-5">
           <div className="flex justify-between items-center">
               <p className="text-2xl font-semibold">{titulo}</p>
               <img className="w-9 ml-auto" src={image} alt={titulo} />

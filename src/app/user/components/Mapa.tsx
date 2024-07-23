@@ -17,6 +17,13 @@ L.Icon.Default.mergeOptions({
 const Mapa: React.FC = () => {
   const [position, setPosition] = useState<[number, number] | null>(null);
 
+  var latlng = L.latLng(16.614791,-93.090902); //Politecnica
+  var latlng2 = L.latLng(16.617189,-93.095396); //Jeshua
+
+  var distance = latlng.distanceTo(latlng2);
+
+  alert(`La distancia entre los dos puntos es: ${distance} metros`)
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -43,7 +50,7 @@ const Mapa: React.FC = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <Marker position={position}>
-              <Popup>You are here.</Popup>
+              <Popup>Ruta 1</Popup>
             </Marker>
           </MapContainer>
         ) : (

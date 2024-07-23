@@ -2,52 +2,32 @@ import { BarChart } from "@mui/x-charts";
 import { axisClasses } from "@mui/x-charts";
 const dataset = [
   {
-    monto: 21,
-    mes: "Enero",
+    monto: 28,
+    dia: "Lunes",
   },  
   {
     monto: 28,
-    mes: "Febrero",
+    dia: "Martes",
   },
   {
     monto: 41,
-    mes: "Marzo",
+    dia: "Miercoles",
   },
   {
     monto: 73,
-    mes: "Abril",
+    dia: "Jueves",
   },
   {
     monto: 99,
-    mes: "Mayo",
+    dia: "Viernes",
   },
   {
-    monto: 144,
-    mes: "Junio",
+    monto: 50,
+    dia: "Sabado",
   },
   {
-    monto: 319,
-    mes: "Julio",
-  },
-  {
-    monto: 249,
-    mes: "Agosto",
-  },
-  {
-    monto: 131,
-    mes: "Septiembre",
-  },
-  {
-    monto: 55,
-    mes: "Octubre",
-  },
-  {
-    monto: 48,
-    mes: "Noviembre",
-  },
-  {
-    monto: 25,
-    mes: "Diciembre",
+    monto: 20,
+    dia: "Domingo",
   },
 ];
 
@@ -75,7 +55,7 @@ const Grafica = () => {
   const tickLabelPlacement = "middle";
 
   return (
-    <div className="w-full shadow mt-10 rounded p-5">
+    <div id="grafica_id" className="w-full shadow mt-10 rounded p-5">
       <div className="flex">
         <div className="w-1/2">
           <p className="text-2xl font-semibold">Ganancias mensuales</p>
@@ -91,7 +71,7 @@ const Grafica = () => {
           xAxis={[
             {
               scaleType: "band",
-              dataKey: "mes",
+              dataKey: "dia",
               tickPlacement,
               tickLabelPlacement,
             },

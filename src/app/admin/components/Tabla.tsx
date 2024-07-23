@@ -2,97 +2,73 @@ import { Card, Typography } from "@material-tailwind/react";
 
 import colectivo from '../assets/colectivo.png'
 
-const TABLE_HEAD = ["Vehiculo", "Chofer", "Horario", "Estado"];
+const TABLE_HEAD = ["Placa", "Modelo", "Chofer", "Estado"];
 
 const TABLE_ROWS = [
   {
-    name: "John Michael",
-    job: "Manager",
-    date: "23/04/18",
+    placa: "CJA-424-D",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Alexa Liras",
-    job: "Developer",
-    date: "23/04/18",
+    placa: "CJA-424-E",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Laurent Perrier",
-    job: "Executive",
-    date: "19/09/17",
+    placa: "CJA-424-R",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Michael Levi",
-    job: "Developer",
-    date: "24/12/08",
+    placa: "CJA-424-T",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Richard Gran",
-    job: "Manager",
-    date: "04/10/21",
+    placa: "CJA-424-Y",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "John Michael",
-    job: "Manager",
-    date: "23/04/18",
+    placa: "CJA-424-U",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Alexa Liras",
-    job: "Developer",
-    date: "23/04/18",
+    placa: "CJA-424-I",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Laurent Perrier",
-    job: "Executive",
-    date: "19/09/17",
+    placa: "CJA-424-O",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Michael Levi",
-    job: "Developer",
-    date: "24/12/08",
+    placa: "CJA-424-P",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "Richard Gran",
-    job: "Manager",
-    date: "04/10/21",
+    placa: "CJA-424-A",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
   {
-    name: "John Michael",
-    job: "Manager",
-    date: "23/04/18",
-    estado: "Activo"
-  },
-  {
-    name: "Alexa Liras",
-    job: "Developer",
-    date: "23/04/18",
-    estado: "Activo"
-  },
-  {
-    name: "Laurent Perrier",
-    job: "Executive",
-    date: "19/09/17",
-    estado: "Activo"
-  },
-  {
-    name: "Michael Levi",
-    job: "Developer",
-    date: "24/12/08",
-    estado: "Activo"
-  },
-  {
-    name: "Richard Gran",
-    job: "Manager",
-    date: "04/10/21",
+    placa: "CJA-424-S",
+    chofer: "John Michael",
+    modelo: "Urban 2005",
     estado: "Activo"
   },
 ];
@@ -128,21 +104,21 @@ const Tabla = () => {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(({ name, job, date, estado }, index) => {
+            {TABLE_ROWS.map(({ placa, chofer, modelo, estado }, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
               const classes = isLast
                 ? "p-4"
                 : "p-4 border-b border-blue-gray-50";
 
               return (
-                <tr key={name}>
+                <tr key={placa}>
                   <td className={classes}>
                     <Typography
                       variant="small"
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {name}
+                      {placa}
                     </Typography>
                   </td>
                   <td className={classes}>
@@ -151,7 +127,7 @@ const Tabla = () => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {job}
+                      {modelo}
                     </Typography>
                   </td>
                   <td className={classes}>
@@ -160,7 +136,7 @@ const Tabla = () => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {date}
+                      {chofer}
                     </Typography>
                   </td>
                   <td className={classes}>
