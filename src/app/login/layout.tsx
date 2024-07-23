@@ -1,4 +1,4 @@
-import "../globals.css";
+import "./globals.css";
 import { ReactNode } from "react";
 
 interface RootLayoutProps {
@@ -6,16 +6,16 @@ interface RootLayoutProps {
 }
 
 export const metadata = {
-  title: "Ruta Segura",
-  description: "Ruta Segura es una aplicación que te permite compartir tu ubicación en tiempo real con tus seres queridos.",
+  title: "Inicio",
+  description: "Página de autentificación"
 };
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <>
-      {children}
-    </>
-  );
+  <>
+    {children}
+  </>
+  )
 };
 
 export default RootLayout;
