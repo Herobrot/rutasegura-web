@@ -59,7 +59,7 @@ const Login: React.FC = () => {
 
         setRegistering(true); // Iniciar proceso de registro
 
-        fetch(`${process.env.NEXT_PUBLIC_APIURL}/user/register`, {
+        fetch(`${process.env.NEXT_PUBLIC_APIURL}/users/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -92,7 +92,12 @@ const Login: React.FC = () => {
                     text: 'Registro exitoso.',
                 }).then((result) => {
                     if (result.isConfirmed || result.isDismissed) {
-                        window.location.href = "/admin";
+                        if (data.tipo === 'admin') {
+                            window.location.href = "/admin";
+                        }
+                        else{
+                            window.location.href = "/"+data.id;
+                        }
                     }
                 });
             }
@@ -120,7 +125,7 @@ const Login: React.FC = () => {
             return;
         }
 
-        fetch(`${process.env.NEXT_PUBLIC_APIURL}/user/login`, {
+        fetch(`${process.env.NEXT_PUBLIC_APIURL}/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -146,7 +151,12 @@ const Login: React.FC = () => {
                     text: 'Inicio de sesión exitoso de conductor.',
                 }).then((result) => {
                     if (result.isConfirmed || result.isDismissed) {
-                        window.location.href = "/admin";
+                        if (data.tipo === 'admin') {
+                            window.location.href = "/admin";
+                        }
+                        else{
+                            window.location.href = "/conductor";
+                        }
                     }
                 });
             }
