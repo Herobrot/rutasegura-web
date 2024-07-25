@@ -55,8 +55,8 @@ const Sidebar = () => {
   const { visible, toggleSidebar } = useSidebar()
 
   return (
-    <SidebarContainer visible={visible}>
-      <ToggleButton onClick={toggleSidebar} visible={visible}>
+    <SidebarContainer visible={visible} onMouseEnter={toggleSidebar} onMouseLeave={toggleSidebar}>
+      <ToggleButton visible={visible}>
         <FontAwesomeIcon icon={visible ? faBarsStaggered : faBars} size="lg" />
       </ToggleButton>
       <NavItem>
