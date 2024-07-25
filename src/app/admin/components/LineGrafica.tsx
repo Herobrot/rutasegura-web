@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { LineChart as MUILineChart, axisClasses } from '@mui/x-charts';
-
+import { SeriesValueFormatter } from '@mui/x-charts/internals';
 
 interface DataItem {
   monto: number;
@@ -18,7 +18,13 @@ const defaultDataset: DataItem[] = [
   { monto: 20, dia: 'Domingo' },
 ];
 
-const valueFormatter = (value: number) => `$${value}`;
+const valueFormatter: SeriesValueFormatter<number | null> = (value) => {
+    if (value === null) {
+      return '';
+    }
+    return value.toString();
+  };
+  
 
 const chartSetting = {
   yAxis: [
@@ -86,7 +92,7 @@ const LineChart: React.FC = () => {
       </Header>
       <ChartContainer>
         <MUILineChart
-          dataset={dataset}
+          dataset={dataset as unknown as any}
           xAxis={[
             {
               scaleType: 'band',

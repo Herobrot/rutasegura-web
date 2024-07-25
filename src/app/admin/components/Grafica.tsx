@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { BarChart, axisClasses } from '@mui/x-charts';
-import { DatasetElementType } from '@mui/x-charts/internals';
+import { SeriesValueFormatter } from '@mui/x-charts/internals';
 
 type DataItem = {
   monto: number;
   dia: string;
 }
 
-const defaultDataset: DataItem[] = [
+const defaultDataset: any[] = [
   { monto: 28, dia: 'Lunes' },
   { monto: 28, dia: 'Martes' },
   { monto: 41, dia: 'Miércoles' },
@@ -18,7 +18,12 @@ const defaultDataset: DataItem[] = [
   { monto: 20, dia: 'Domingo' },
 ];
 
-const valueFormatter = (value: number) => `${value}`;
+const valueFormatter: SeriesValueFormatter<number | null> = (value) => {
+  if (value === null) {
+    return '';
+  }
+  return value.toString();
+};
 
 const chartSetting = {
   yAxis: [
@@ -86,7 +91,7 @@ const Grafica: React.FC = () => {
       </Header>
       <ChartContainer>
         <BarChart
-          dataset={dataset as unknown as DatasetElementType<DataItem>[]}
+          dataset={dataset as unknown as any}
           xAxis={[
             {
               scaleType: 'band',
@@ -94,7 +99,7 @@ const Grafica: React.FC = () => {
               tickPlacement,
               tickLabelPlacement,
             },
-          ]}
+          ]}          
           {...chartSetting}
           loading={dataset.length === 0 || !dataset}
         />
