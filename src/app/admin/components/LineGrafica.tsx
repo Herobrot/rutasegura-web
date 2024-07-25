@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { BarChart, axisClasses } from '@mui/x-charts';
+import { LineChart as MUILineChart, axisClasses } from '@mui/x-charts';
 import { SeriesValueFormatter } from '@mui/x-charts/internals';
 
-type DataItem = {
+interface DataItem {
   monto: number;
   dia: string;
 }
 
-const defaultDataset: any[] = [
+const defaultDataset: DataItem[] = [
   { monto: 28, dia: 'Lunes' },
   { monto: 28, dia: 'Martes' },
   { monto: 41, dia: 'Miércoles' },
@@ -19,11 +19,12 @@ const defaultDataset: any[] = [
 ];
 
 const valueFormatter: SeriesValueFormatter<number | null> = (value) => {
-  if (value === null) {
-    return '';
-  }
-  return value.toString();
-};
+    if (value === null) {
+      return '';
+    }
+    return value.toString();
+  };
+  
 
 const chartSetting = {
   yAxis: [
@@ -40,7 +41,7 @@ const chartSetting = {
   },
 };
 
-const GraficaContainer = styled.div`
+const LineChartContainer = styled.div`
   width: 100%;
   margin-top: 10px;
   padding: 20px;
@@ -67,7 +68,7 @@ const ChartContainer = styled.div`
   width: 100%;
 `;
 
-const Grafica: React.FC = () => {
+const LineChart: React.FC = () => {
   const [dataset, setDataset] = useState<DataItem[]>(defaultDataset);
 
   useEffect(() => {
@@ -82,15 +83,15 @@ const Grafica: React.FC = () => {
   const tickLabelPlacement = 'middle';
 
   return (
-    <GraficaContainer id="grafica_id">
+    <LineChartContainer id="linechart_id">
       <Header>
         <div>
           <Title>Ganancias mensuales</Title>
-          <Subtitle>Grafico de las ganancias mensuales de la empresa</Subtitle>
-        </div>
+          <Subtitle>Gráfico de las ganancias mensuales de la empresa</Subtitle>
+        </div>        
       </Header>
       <ChartContainer>
-        <BarChart
+        <MUILineChart
           dataset={dataset as unknown as any}
           xAxis={[
             {
@@ -99,13 +100,13 @@ const Grafica: React.FC = () => {
               tickPlacement,
               tickLabelPlacement,
             },
-          ]}          
+          ]}
           {...chartSetting}
           loading={dataset.length === 0 || !dataset}
         />
       </ChartContainer>
-    </GraficaContainer>
+    </LineChartContainer>
   );
 };
 
-export default Grafica;
+export default LineChart;

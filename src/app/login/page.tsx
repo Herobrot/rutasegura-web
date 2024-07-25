@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { faArrowsDownToLine } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { saveAuthData, clearAuthData } from "./token";
-import "./inicio.css";
+import "./login.css";
 import Navbar from '../components/Navbar';
 
 interface Credentials {
