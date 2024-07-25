@@ -75,7 +75,7 @@ const Sidebar = () => {
         <NavText visible={visible}>Mensajes</NavText>
         <FontAwesomeIcon icon={faChevronRight} />
       </NavItem>
-      <NavItem onClick={toggleSidebar}>
+      <NavItem>
         <NavText visible={visible}>Salir</NavText>
         <FontAwesomeIcon icon={faArrowRightFromBracket} rotation={180} />
       </NavItem>

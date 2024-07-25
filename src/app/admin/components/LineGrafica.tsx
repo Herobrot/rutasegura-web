@@ -96,6 +96,7 @@ const LineChart: React.FC = () => {
             },
           ]}
           {...chartSetting}
+          loading={dataset.length === 0 || !dataset}
         />
       </ChartContainer>
     </LineChartContainer>

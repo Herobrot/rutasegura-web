@@ -96,7 +96,7 @@ const Grafica: React.FC = () => {
             },
           ]}
           {...chartSetting}
-          loading={dataset.length === 0}
+          loading={dataset.length === 0 || !dataset}
         />
       </ChartContainer>
     </GraficaContainer>
