@@ -1,6 +1,6 @@
-// src/components/Tabla.tsx
 import React, { useState, FormEvent } from 'react';
-import { Card, Typography } from "@material-tailwind/react";
+import styled from 'styled-components';
+import { Typography } from "@material-tailwind/react";
 import Modal from './Modal'; // Asegúrate de importar el componente Modal
 
 interface TableRow {
@@ -11,74 +11,96 @@ interface TableRow {
 }
 
 const TABLE_HEAD = ["Placa", "Modelo", "Chofer", "Estado", "Acciones"];
-const TABLE_ROWS = [
-  {
-    placa: "CJA-424-D",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-E",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-R",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-T",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-Y",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-U",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-I",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-O",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-P",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-A",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
-  {
-    placa: "CJA-424-S",
-    chofer: "John Michael",
-    modelo: "Urban 2005",
-    estado: "Activo",
-  },
+const TABLE_ROWS: TableRow[] = [
+  { placa: "CJA-424-D", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-E", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-R", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-T", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-Y", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-U", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-I", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-O", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-P", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-A", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-S", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
 ];
+
+const TableContainer = styled.div`
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 2.5rem 0;
+  border-radius: 8px;
+  padding: 1.25rem;
+  background-color: white;
+  height: 42rem;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+`;
+
+const Title = styled.p`
+  font-size: 1.5rem;
+  font-weight: 700;
+`;
+
+const Subtitle = styled.p`
+  color: #6c757d;
+`;
+
+const AddButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #38a169;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+`;
+
+const StyledCard = styled.div`
+  width: 100%;
+  overflow-y: auto;
+  height: 88%;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  min-width: 30rem;
+  text-align: center;
+`;
+
+const StyledTh = styled.th`
+  border-bottom: 1px solid #cbd5e0;
+  background-color: #e2e8f0;
+  padding: 1rem;
+`;
+
+const StyledTd = styled.td<{ isLast: boolean }>`
+  padding: 1rem;
+  border-bottom: ${({ isLast }) => (isLast ? 'none' : '1px solid #e2e8f0')};
+`;
+
+const ActionButton = styled.button<{ color: string }>`
+  margin-right: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: ${({ color }) => color};
+  border-radius: 4px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  &:last-child {
+    margin-right: 0;
+  }
+`;
+
 
 const Tabla: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -106,81 +128,68 @@ const Tabla: React.FC = () => {
   };
 
   return (
-    <div id="tabla_id" className="w-full shadow shadow-gray-400 my-10 rounded p-5" style={{ height: "42rem" }}>
-      <div>
-        <div className="flex justify-between p-2">
-          <p className="text-2xl font-bold">Vehiculos registrados</p>
-          <button
-            onClick={handleAddButtonClick}
-            className="flex items-center justify-center bg-green-500 rounded-full text-2xl w-8 h-8 font-bold text-white"
-          >
-            +
-          </button>
+    <TableContainer id="tabla_id">
+      <Header>
+        <div>
+          <Title>Vehículos registrados</Title>
+          <Subtitle>Lista de vehículos y choferes registrados</Subtitle>
         </div>
-        <p>Lista de vehiculos y choferes registrados</p>
-      </div>
-
-      <Card className="w-full overflow-y-scroll" style={{ height: "88%" }}>
-        <table className="w-full min-w-max table-auto text-center">
+        <AddButton onClick={handleAddButtonClick}>+</AddButton>
+      </Header>
+      <StyledCard>
+        <StyledTable>
           <thead className="sticky top-0 bg-white">
             <tr>
               {TABLE_HEAD.map((head) => (
-                <th key={head} className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                  <Typography variant="small" color="blue-gray" className="font-semibold text-lg leading-none opacity-70">
+                <StyledTh key={head}>
+                  <Typography variant="small" color="blue-gray" className="font-semibold text-lg leading-none opacity-70" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                     {head}
                   </Typography>
-                </th>
+                </StyledTh>
               ))}
             </tr>
           </thead>
           <tbody>
             {tableRows.map(({ placa, chofer, modelo, estado }, index) => {
               const isLast = index === tableRows.length - 1;
-              const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
               return (
                 <tr key={placa}>
-                  <td className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal">
+                  <StyledTd isLast={isLast}>
+                    <Typography variant="small" color="blue-gray" className="font-normal" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                       {placa}
                     </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal">
+                  </StyledTd>
+                  <StyledTd isLast={isLast}>
+                  <Typography variant="small" color="blue-gray" className="font-normal" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                       {modelo}
                     </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal">
+                  </StyledTd>
+                  <StyledTd isLast={isLast}>
+                  <Typography variant="small" color="blue-gray" className="font-normal" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                       {chofer}
                     </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium text-green-600">
+                  </StyledTd>
+                  <StyledTd isLast={isLast}>
+                    <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium text-green-600" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                       {estado}
                     </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography as="a" href="#" variant="small" color="blue-gray" className="font-normal">
-                      <div className="flex justify-center">
-                        <button className="mr-3 px-3 py-0.5 bg-yellow-300 rounded">
-                          Editar
-                        </button>
-                        <button className="px-3 py-0.5 bg-red-500 rounded">
-                          Eliminar
-                        </button>
-                      </div>
-                    </Typography>
-                  </td>
+                  </StyledTd>
+                  <StyledTd isLast={isLast}>
+                    <div className="flex justify-center">
+                      <ActionButton color="#ecc94b">Editar</ActionButton>
+                      <ActionButton color="#f56565">Eliminar</ActionButton>
+                    </div>
+                  </StyledTd>
                 </tr>
               );
             })}
           </tbody>
-        </table>
-      </Card>
+        </StyledTable>
+      </StyledCard>
 
       <Modal show={showModal} onClose={handleCloseModal} onSubmit={handleSubmit} />
-    </div>
+    </TableContainer>
   );
 };
 
