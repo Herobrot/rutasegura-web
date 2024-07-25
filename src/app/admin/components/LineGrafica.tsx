@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { BarChart, axisClasses } from '@mui/x-charts';
-import { DatasetElementType } from '@mui/x-charts/internals';
+import { LineChart as MUILineChart, axisClasses } from '@mui/x-charts';
 
-type DataItem = {
+
+interface DataItem {
   monto: number;
   dia: string;
 }
@@ -18,7 +18,7 @@ const defaultDataset: DataItem[] = [
   { monto: 20, dia: 'Domingo' },
 ];
 
-const valueFormatter = (value: number) => `${value}`;
+const valueFormatter = (value: number) => `$${value}`;
 
 const chartSetting = {
   yAxis: [
@@ -35,7 +35,7 @@ const chartSetting = {
   },
 };
 
-const GraficaContainer = styled.div`
+const LineChartContainer = styled.div`
   width: 100%;
   margin-top: 10px;
   padding: 20px;
@@ -62,7 +62,7 @@ const ChartContainer = styled.div`
   width: 100%;
 `;
 
-const Grafica: React.FC = () => {
+const LineChart: React.FC = () => {
   const [dataset, setDataset] = useState<DataItem[]>(defaultDataset);
 
   useEffect(() => {
@@ -77,16 +77,16 @@ const Grafica: React.FC = () => {
   const tickLabelPlacement = 'middle';
 
   return (
-    <GraficaContainer id="grafica_id">
+    <LineChartContainer id="linechart_id">
       <Header>
         <div>
           <Title>Ganancias mensuales</Title>
-          <Subtitle>Grafico de las ganancias mensuales de la empresa</Subtitle>
-        </div>
+          <Subtitle>Gráfico de las ganancias mensuales de la empresa</Subtitle>
+        </div>        
       </Header>
       <ChartContainer>
-        <BarChart
-          dataset={dataset as unknown as DatasetElementType<DataItem>[]}
+        <MUILineChart
+          dataset={dataset}
           xAxis={[
             {
               scaleType: 'band',
@@ -96,11 +96,10 @@ const Grafica: React.FC = () => {
             },
           ]}
           {...chartSetting}
-          loading={dataset.length === 0}
         />
       </ChartContainer>
-    </GraficaContainer>
+    </LineChartContainer>
   );
 };
 
-export default Grafica;
+export default LineChart;

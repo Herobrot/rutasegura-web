@@ -1,13 +1,25 @@
 "use client"
-import NavBar from "./components/NavBar";
+import styled from "styled-components";
+
+import { SidebarProvider, useSidebar } from "../context/SidebarContext";
+
 import Card from "./components/Card";
-import Grafica from "./components/Grafica";
+import ChartSwitcher from "./components/ChartSwitcher";
 import Tabla from "./components/Tabla";
+import Sidebar from "./components/Sidebar";
 
 import efectivo from './assets/efectivo.png'
 import colectivo from './assets/colectivo.png'
 import cursor from './assets/cursor.png'
 import volante from './assets/volante.png'
+
+
+const MainContent = styled.div<{ sidebarvisible: boolean }>`
+  margin-left: ${({ sidebarvisible }) => (sidebarvisible ? '15vw' : '5vw')};
+  transition: margin-left 0.3s;
+  padding: 20px;
+  flex: 1;
+`;
 
 const cardItems = [
   { titulo: "Ganancias totales", valor: "$12,500", image: efectivo },
@@ -16,26 +28,42 @@ const cardItems = [
   { titulo: "Conductores", valor: "19", image: volante },
 ];
 
+const AppContent: React.FC = () => {
+  const visible = useSidebar().visible;
+
+  return (
+    <MainContent sidebarvisible={visible}>
+      <div id="estadistica_id" className="w-auto">
+        <div className="px-20 pt-20">
+          <div className="grid grid-cols-2 gap-10">
+            {
+              cardItems.map(( {titulo, valor, image}, index ) => (
+                <Card
+                  key={index}
+                  titulo={titulo}
+                  valor={valor}
+                  image={image.src}                            
+                  />
+              ))
+            }
+          </div>
+          <ChartSwitcher />
+          <Tabla />
+        </div>
+      </div>
+    </MainContent>
+  );
+
+}
+
+
 export default function App() {
   return (
-    <div id="estadistica_id" className="w-auto">
-      <NavBar />
-      <div className="px-20 pt-20">
-        <div className="grid grid-cols-2 gap-10">
-          {
-            cardItems.map(( {titulo, valor, image}, index ) => (
-              <Card
-                key={index}
-                titulo={titulo}
-                valor={valor}
-                image={image}
-              />
-            ))
-          }
-        </div>
-        <Grafica />
-        <Tabla />
+    <SidebarProvider>
+      <div style={{ display: "flex" }}>
+        <Sidebar />
+        <AppContent />
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
