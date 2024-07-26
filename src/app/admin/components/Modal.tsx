@@ -83,7 +83,7 @@ const Modal: FC<ModalProps> = ({ show, onClose, onSubmit }) => {
       const timeout = setTimeout(() => {
         setIsClosing(false);
         onClose();
-      }, 400);
+      }, 300);
       return () => clearTimeout(timeout);
     }
   }, [isClosing, onClose]);
