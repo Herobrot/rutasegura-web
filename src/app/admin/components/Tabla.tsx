@@ -4,7 +4,7 @@ import { Typography } from "@material-tailwind/react";
 import Modal from './Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-
+import Swal from 'sweetalert2';
 interface TableRow {
   placa: string;
   chofer: string;
@@ -149,56 +149,92 @@ const Tabla: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${id}`, {
-        method: 'DELETE',
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esta acción",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, bórralo',
+        cancelButtonText: 'Cancelar'
       });
-      if (!response.ok) {
-        throw new Error('Error al eliminar el vehículo');
+  
+      if (result.isConfirmed) {
+        const response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${id}`, {
+          method: 'DELETE',
+        });
+  
+        if (!response.ok) {
+          throw new Error('Error al eliminar el vehículo');
+        }
+  
+        setTableRows(tableRows.filter(row => row._id !== id));
+        Swal.fire(
+          '¡Eliminado!',
+          'El vehículo ha sido eliminado.',
+          'success'
+        );
       }
-      setTableRows(tableRows.filter(row => row._id !== id));
     } catch (error) {
       console.error('Error al eliminar el vehículo:', error);
+      Swal.fire(
+        'Error',
+        'No se pudo eliminar el vehículo. Por favor, inténtalo de nuevo.',
+        'error'
+      );
     }
   };
 
-  const handleSubmit = async (unidad: Omit<Unidad, '_id' | 'estado'>) => {
-    try {
-      let response;
-      if (unidadToEdit) {
-        response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${unidadToEdit.placa}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(unidad),
-        });
-      } else {
-        response = await fetch("https://api.rutasegura.xyz/unidades", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(unidad),
-        });
-      }
-
-      if (!response.ok) {
-        throw new Error('Error al guardar el vehículo');
-      }
-
-      const savedUnidad = await response.json();
-
-      if (unidadToEdit) {
-        setTableRows(tableRows.map(row => row._id === unidadToEdit._id ? savedUnidad : row));
-      } else {
-        setTableRows([...tableRows, savedUnidad]);
-      }
-
-      handleCloseModal();
-    } catch (error) {
-      console.error('Error al guardar el vehículo:', error);
+const handleSubmit = async (unidad: Omit<Unidad, '_id' | 'estado'>) => {
+  try {
+    let response;
+    if (unidadToEdit) {
+      response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${unidadToEdit.placa}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(unidad),
+      });
+    } else {
+      response = await fetch("https://api.rutasegura.xyz/unidades", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(unidad),
+      });
     }
-  };
+
+    if (!response.ok) {
+      throw new Error('Error al guardar el vehículo');
+    }
+
+    const savedUnidad = await response.json();
+
+    if (unidadToEdit) {
+      setTableRows(tableRows.map(row => row._id === unidadToEdit._id ? savedUnidad : row));
+    } else {
+      setTableRows([...tableRows, savedUnidad]);
+    }
+
+    handleCloseModal();
+    Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: unidadToEdit ? 'Vehículo actualizado correctamente' : 'Vehículo guardado correctamente',
+    });
+  } catch (error) {
+    console.error('Error al guardar el vehículo:', error);
+    
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Hubo un problema al guardar el vehículo. Por favor, inténtalo de nuevo.',
+    });
+  }
+};
 
   if (isLoading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
