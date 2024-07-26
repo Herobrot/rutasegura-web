@@ -1,6 +1,11 @@
 import React, { FC, FormEvent, useRef, useEffect, useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
+interface ModalProps {
+  show: boolean;
+  onClose: () => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}
 
 const fadeIn = keyframes`
   from {
@@ -63,41 +68,9 @@ const ModalTitle = styled.h2`
   color: #333;
 `;
 
-interface Unidad {
-  placa: string;
-  chofer: string;
-  modelo: string;
-  estado: string;
-  _id: string;
-}
-
-interface ModalProps {
-  show: boolean;
-  onClose: () => void;
-  onSubmit: (unidad: Omit<Unidad, '_id' | 'estado'>) => void;
-  unidadToEdit?: Unidad;
-}
-
-const Modal: FC<ModalProps> = ({ show, onClose, onSubmit, unidadToEdit }) => {
+const Modal: FC<ModalProps> = ({ show, onClose, onSubmit }) => {
   const [isClosing, setIsClosing] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const [formData, setFormData] = useState({
-    placa: '',
-    modelo: '',
-    chofer: ''
-  });
-
-  useEffect(() => {
-    if (unidadToEdit) {
-      setFormData({
-        placa: unidadToEdit.placa,
-        modelo: unidadToEdit.modelo,
-        chofer: unidadToEdit.chofer
-      });
-    } else {
-      setFormData({ placa: '', modelo: '', chofer: '' });
-    }
-  }, [unidadToEdit]);
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -110,35 +83,22 @@ const Modal: FC<ModalProps> = ({ show, onClose, onSubmit, unidadToEdit }) => {
       const timeout = setTimeout(() => {
         setIsClosing(false);
         onClose();
-      }, 300);
+      }, 400);
       return () => clearTimeout(timeout);
     }
   }, [isClosing, onClose]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit(formData);
-    setIsClosing(true);
-  };
 
   return (
     <ModalContainer show={show || isClosing} isClosing={isClosing} onClick={handleClickOutside}>
       <ModalContent ref={modalRef}>
         <ModalBody>
-          <ModalTitle>{unidadToEdit ? 'Editar Vehículo' : 'Agregar Vehículo'}</ModalTitle>
-          <form onSubmit={handleSubmit}>
+          <ModalTitle>Agregar Vehículo</ModalTitle>
+          <form onSubmit={onSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Placa</label>
               <input
                 type="text"
                 name="placa"
-                value={formData.placa}
-                onChange={handleInputChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
@@ -148,8 +108,6 @@ const Modal: FC<ModalProps> = ({ show, onClose, onSubmit, unidadToEdit }) => {
               <input
                 type="text"
                 name="modelo"
-                value={formData.modelo}
-                onChange={handleInputChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
@@ -159,8 +117,6 @@ const Modal: FC<ModalProps> = ({ show, onClose, onSubmit, unidadToEdit }) => {
               <input
                 type="text"
                 name="chofer"
-                value={formData.chofer}
-                onChange={handleInputChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
@@ -177,7 +133,7 @@ const Modal: FC<ModalProps> = ({ show, onClose, onSubmit, unidadToEdit }) => {
                 type="submit"
                 className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
               >
-                {unidadToEdit ? 'Actualizar' : 'Guardar'}
+                Guardar
               </button>
             </div>
           </form>
