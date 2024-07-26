@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 
 export interface Historial {
@@ -32,7 +33,7 @@ export const GPSProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 
   const fetchGPSData = async () => {
     try {
-      const response = await fetch('http://localhost:4000/kits/gps/historial');
+      const response = await fetch('https://api.rutasegura.xyz/kits/gps/historial');
       const data = await response.json();
       setKits(data.unidades);
     } catch (error) {

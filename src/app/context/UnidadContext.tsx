@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext, useState, useMemo, ReactNode } from 'react';
 
 export interface Unidad {
@@ -29,7 +30,7 @@ export const UnidadProvider: React.FC<{children: ReactNode}> = ({ children }) =>
 
   const fetchUnidad = async (_idKit: string) => {
     try {
-      const response = await fetch(`http://localhost:4000/unidades/kit/${_idKit}`);
+      const response = await fetch(`https://api.rutasegura.xyz/unidades/kit/${_idKit}`);
       const data = await response.json();
       setUnidad(data.unidad);
     } catch (error) {
