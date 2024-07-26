@@ -1,6 +1,7 @@
-import { FaRoute, FaClock, FaUser, FaExclamationTriangle } from 'react-icons/fa';
+import { FaRoute, FaUser, FaExclamationTriangle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { useUnidad } from '../context/UnidadContext';
+import { useDistancia } from '../context/DistanciaContext';
 
 const CardContainer = styled.div`
   background-color: white;
@@ -66,8 +67,9 @@ const SmallText = styled.p`
   color: #718096;
 `;
 
-export const Card: React.FC<{ distancia: number; duracion: string }> = ({ distancia, duracion }) => {
+export const Card: React.FC = () => {
   const { unidad } = useUnidad();
+  const { kitDistancia } = useDistancia();
 
   return (
     <CardContainer>
@@ -85,14 +87,7 @@ export const Card: React.FC<{ distancia: number; duracion: string }> = ({ distan
               <FaRoute style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
               Distancia
             </InfoTitle>
-            <InfoValue>{distancia} metros</InfoValue>
-          </InfoBlock>
-          <InfoBlock>
-            <InfoTitle>
-              <FaClock style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
-              Duración
-            </InfoTitle>
-            <InfoValue>{duracion}</InfoValue>
+            <InfoValue>{kitDistancia ? `${kitDistancia.distancia}m` : 'No se encontró una distancia cercana'} metros</InfoValue>
           </InfoBlock>
           <InfoBlock>
             <InfoTitle>
