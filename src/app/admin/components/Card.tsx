@@ -53,7 +53,7 @@ export const Card: React.FC<CardProps> = ({ titulo, valor, image }, index) => {
         <CardImage src={image} alt={titulo} />
       </CardHeader>
       <CardValue>{valor}</CardValue>
-      <CardSubtitle>+ 10% desde el mes pasado</CardSubtitle>
+      <CardSubtitle>Datos del mes actual</CardSubtitle>
     </CardContainer>
   );
 };
