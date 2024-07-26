@@ -1,7 +1,9 @@
 import React, { useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import { Typography } from "@material-tailwind/react";
-import Modal from './Modal'; // Asegúrate de importar el componente Modal
+import Modal from './Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface TableRow {
   placa: string;
@@ -12,17 +14,7 @@ interface TableRow {
 
 const TABLE_HEAD = ["Placa", "Modelo", "Chofer", "Estado", "Acciones"];
 const TABLE_ROWS: TableRow[] = [
-  { placa: "CJA-424-D", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-E", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-R", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-T", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-Y", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-U", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-I", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-O", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-P", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-A", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
-  { placa: "CJA-424-S", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" },
+  { placa: "CJA-424-D", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" }
 ];
 
 const TableContainer = styled.div`
@@ -56,10 +48,11 @@ const AddButton = styled.button`
   justify-content: center;
   background-color: #38a169;
   border-radius: 50%;
+  padding: 0.5rem;
   color: white;
-  font-size: 1.25rem;
-  width: 2rem;
-  height: 2rem;
+  font-size: 1.75rem;
+  width: 3vw;
+  height: 3vw;
   font-weight: 700;
   border: none;
   cursor: pointer;
@@ -134,7 +127,9 @@ const Tabla: React.FC = () => {
           <Title>Vehículos registrados</Title>
           <Subtitle>Lista de vehículos y choferes registrados</Subtitle>
         </div>
-        <AddButton onClick={handleAddButtonClick}>+</AddButton>
+        <AddButton onClick={handleAddButtonClick}>
+          <FontAwesomeIcon icon={faPlus} />
+        </AddButton>
       </Header>
       <StyledCard>
         <StyledTable>
