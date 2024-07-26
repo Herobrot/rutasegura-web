@@ -13,8 +13,7 @@ const App: React.FC = () => {
       <GPSProvider>
         <DistanciaProvider>
           <UnidadProvider>
-            <Card />
-            <Mapa />
+          <Mapa />
           </UnidadProvider>
         </DistanciaProvider>
       </GPSProvider>

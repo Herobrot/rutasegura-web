@@ -68,8 +68,10 @@ const SmallText = styled.p`
 `;
 
 export const Card: React.FC = () => {
-  const { unidad } = useUnidad();
+  const { fetchUnidad } = useUnidad();
+  const  unidad : any = fetchUnidad('66a339c1af73653caa9fa27b');
   const { kitDistancia } = useDistancia();
+  console.log(unidad);
 
   return (
     <CardContainer>

@@ -29,10 +29,15 @@ export const UnidadProvider: React.FC<{children: ReactNode}> = ({ children }) =>
   const [unidad, setUnidad] = useState<Unidad | null>(null);
 
   const fetchUnidad = async (_idKit: string) => {
+    if(!_idKit){
+      _idKit = '66a339c1af73653caa9fa27b';
+    };
+    console.log(_idKit);
     try {
       const response = await fetch(`https://api.rutasegura.xyz/unidades/kit/${_idKit}`);
       const data = await response.json();
       setUnidad(data.unidad);
+      return data.unidad;
     } catch (error) {
       console.error('Error fetching Unidad data:', error);
     }
