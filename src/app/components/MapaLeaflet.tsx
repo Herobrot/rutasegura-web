@@ -1,13 +1,8 @@
 "use client";
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import styles from './map.modules.css';
-
-// Ignorar temporalmente la verificación de tipos en esta línea
-// @ts-ignore
-delete L.Icon.Default.prototype._getIconUrl;
 
 const customIcon = new L.Icon({
   iconUrl: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
@@ -20,19 +15,16 @@ const customIcon = new L.Icon({
 
 interface LeafletMapProps {
   position: [number, number] | null;
-  politecnicaPos: [number, number];
-  jeshuaPos: [number, number];
-  distance: number | null;
+  closestUnit: { lat: number; long: number; } | null;
 }
 
-const LeafletMap: React.FC<LeafletMapProps> = ({ position, politecnicaPos, jeshuaPos, distance }) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({ position, closestUnit }) => {
   return (
     <div className="h-96 w-full">
       {position ? (
         <MapContainer
           center={position}
           zoom={13}
-          className={styles.map}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -40,13 +32,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, politecnicaPos, jeshu
           <Marker position={position} icon={customIcon}>
             <Popup>Tu ubicación actual</Popup>
           </Marker>
-          <Marker position={politecnicaPos} icon={customIcon}>
-            <Popup>Politécnica</Popup>
-          </Marker>
-          <Marker position={jeshuaPos} icon={customIcon}>
-            <Popup>Jeshua</Popup>
-          </Marker>
-          <Polyline positions={[politecnicaPos, jeshuaPos]} color="blue" />
+          {closestUnit && (
+            <Marker position={[closestUnit.lat, closestUnit.long]} icon={customIcon}>
+              <Popup>Unidad más cercana</Popup>
+            </Marker>
+          )}
         </MapContainer>
       ) : (
         <div className="h-full flex items-center justify-center bg-gray-100">
