@@ -3,16 +3,19 @@ import Mapa from "./components/Mapa";
 import Navbar from "./components/Navbar";
 import { GPSProvider } from "./context/GpsContext";
 import { UnidadProvider } from "./context/UnidadContext";
+import { DistanciaProvider } from "./context/DistanciaContext";
 
 const App: React.FC = () => {
   return (
     <div className="w-screen h-screen">
       <Navbar />
       <GPSProvider>
-        <UnidadProvider>
-          <Card />
-          <Mapa />
-        </UnidadProvider>
+        <DistanciaProvider>
+          <UnidadProvider>
+            <Card />
+            <Mapa />
+          </UnidadProvider>
+        </DistanciaProvider>
       </GPSProvider>
     </div>
   );

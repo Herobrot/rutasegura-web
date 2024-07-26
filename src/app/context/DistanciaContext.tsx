@@ -3,7 +3,6 @@ import React, { createContext, useContext, useState, ReactNode, useMemo } from '
 export interface KitDistancia {
   _idKit: string;
   distancia: number;
-  duracion: string;
 }
 
 interface DistanciaContextType {
