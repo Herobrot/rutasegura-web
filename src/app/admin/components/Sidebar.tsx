@@ -64,14 +64,6 @@ const Sidebar = () => {
         <FontAwesomeIcon icon={faChevronRight} />
       </NavItem>
       <NavItem>
-        <NavText visible={visible}>Locatarios</NavText>
-        <FontAwesomeIcon icon={faChevronRight} />
-      </NavItem>
-      <NavItem>
-        <NavText visible={visible}>Locales</NavText>
-        <FontAwesomeIcon icon={faChevronRight} />
-      </NavItem>
-      <NavItem>
         <NavText visible={visible}>Mensajes</NavText>
         <FontAwesomeIcon icon={faChevronRight} />
       </NavItem>
