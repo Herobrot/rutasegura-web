@@ -9,11 +9,11 @@ import Navbar from '../components/Navbar';
 
 interface Credentials {
     password: string;
-    nickname: string;
+    correo: string;
 }
 
 const Login: React.FC = () => {
-    const [credentials, setCredentials] = useState<Credentials>({ password: '', nickname: '' });
+    const [credentials, setCredentials] = useState<Credentials>({ password: '', correo: '' });
     const [registerForm, setRegisterForm] = useState({
         name: '',
         email: '',
@@ -175,21 +175,11 @@ const Login: React.FC = () => {
         <><main>
             <Navbar></Navbar>
             <input type="checkbox" id="chk" aria-hidden="false" />
-            <div className="signup">
-                <form onSubmit={handleRegisterSubmit}>
-                    <label htmlFor="chk" aria-hidden="true">Registrarse</label>
-                    <input type="email" name="email" placeholder="Email" autoComplete="off" onChange={handleRegisterInputChange} />
-                    <input type='text' name='name' placeholder='Nombre' onChange={handleRegisterInputChange} />
-                    <input type="password" name="password" placeholder="Contraseña" onChange={handleRegisterInputChange} />
-                    <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" onChange={handleRegisterInputChange} />
-                    <button type="submit" disabled={registering}>Registrarse</button>
-                </form>
-            </div>
 
             <div className="login">
                 <form onSubmit={handleLoginSubmit}>
                     <label htmlFor="chk" aria-hidden="true">Iniciar sesión</label>
-                    <input type="email" name="nickname" placeholder="Nickname" autoComplete="off" onChange={handleInputChange} />
+                    <input type="email" name="correo" placeholder="correo" autoComplete="off" onChange={handleInputChange} />
                     <input type="password" name="password" placeholder="Password" onChange={handleInputChange} />
                     <button type="submit">Login</button>
                     <label htmlFor="chk" aria-hidden="true">
