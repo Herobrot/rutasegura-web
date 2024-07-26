@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import { Typography } from "@material-tailwind/react";
 import Modal from './Modal';
@@ -10,11 +10,12 @@ interface TableRow {
   chofer: string;
   modelo: string;
   estado: string;
+  _id: string;
 }
 
 const TABLE_HEAD = ["Placa", "Modelo", "Chofer", "Estado", "Acciones"];
 const TABLE_ROWS: TableRow[] = [
-  { placa: "CJA-424-D", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" }
+  { placa: "CJA-424-D", chofer: "John Michael", modelo: "Urban 2005", estado: "Activo" , _id: "1"},
 ];
 
 const TableContainer = styled.div`
@@ -93,32 +94,114 @@ const ActionButton = styled.button<{ color: string }>`
     margin-right: 0;
   }
 `;
-
+interface Unidad {
+  placa: string;
+  chofer: string;
+  modelo: string;
+  estado: string;
+  _id: string;
+}
 
 const Tabla: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
-  const [tableRows, setTableRows] = useState<TableRow[]>(TABLE_ROWS);
+  const [tableRows, setTableRows] = useState<Unidad[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [unidadToEdit, setUnidadToEdit] = useState<Unidad | undefined>(undefined);
+
+  useEffect(() => {
+    fetchVehiculos();
+  }, []);
+
+  const fetchVehiculos = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("https://api.rutasegura.xyz/unidades");
+      if (!response.ok) {
+        throw new Error('Error en la respuesta del servidor');
+      }
+      const data = await response.json();
+      setTableRows(data);
+      setIsLoading(false);
+    } catch (error) {
+      setError('Error al cargar los vehículos');
+      setIsLoading(false);
+    }
+  };
 
   const handleAddButtonClick = () => {
+    setUnidadToEdit(undefined);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setUnidadToEdit(undefined);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const newVehicle: TableRow = {
-      placa: formData.get('placa') as string,
-      modelo: formData.get('modelo') as string,
-      chofer: formData.get('chofer') as string,
-      estado: "Activo"
-    };
-    setTableRows([...tableRows, newVehicle]);
-    handleCloseModal();
+  const handleEdit = (id: string) => {
+    const unidadToEdit = tableRows.find(unidad => unidad._id === id);
+    if (unidadToEdit) {
+      setUnidadToEdit(unidadToEdit);
+      setShowModal(true);
+    }
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Error al eliminar el vehículo');
+      }
+      setTableRows(tableRows.filter(row => row._id !== id));
+    } catch (error) {
+      console.error('Error al eliminar el vehículo:', error);
+    }
+  };
+
+  const handleSubmit = async (unidad: Omit<Unidad, '_id' | 'estado'>) => {
+    try {
+      let response;
+      if (unidadToEdit) {
+        response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${unidadToEdit.placa}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(unidad),
+        });
+      } else {
+        response = await fetch("https://api.rutasegura.xyz/unidades", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(unidad),
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error('Error al guardar el vehículo');
+      }
+
+      const savedUnidad = await response.json();
+
+      if (unidadToEdit) {
+        setTableRows(tableRows.map(row => row._id === unidadToEdit._id ? savedUnidad : row));
+      } else {
+        setTableRows([...tableRows, savedUnidad]);
+      }
+
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error al guardar el vehículo:', error);
+    }
+  };
+
+  if (isLoading) return <div>Cargando...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <TableContainer id="tabla_id">
@@ -137,7 +220,7 @@ const Tabla: React.FC = () => {
             <tr>
               {TABLE_HEAD.map((head) => (
                 <StyledTh key={head}>
-                  <Typography variant="small" color="blue-gray" className="font-semibold text-lg leading-none opacity-70" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                  <Typography variant="small" color="blue-gray" className="font-semibold text-lg leading-none opacity-70"placeholder="" onPointerEnterCapture={() => {}} onPointerLeaveCapture={() => {}}>
                     {head}
                   </Typography>
                 </StyledTh>
@@ -145,35 +228,35 @@ const Tabla: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {tableRows.map(({ placa, chofer, modelo, estado }, index) => {
+            {tableRows.map(({ placa, chofer, modelo, estado, _id }, index) => {
               const isLast = index === tableRows.length - 1;
 
               return (
-                <tr key={placa}>
+                <tr key={_id}>
                   <StyledTd isLast={isLast}>
-                    <Typography variant="small" color="blue-gray" className="font-normal" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                    <Typography variant="small" color="blue-gray" className="font-normal"placeholder="" onPointerEnterCapture={() => {}} onPointerLeaveCapture={() => {}}>
                       {placa}
                     </Typography>
                   </StyledTd>
                   <StyledTd isLast={isLast}>
-                  <Typography variant="small" color="blue-gray" className="font-normal" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                    <Typography variant="small" color="blue-gray" className="font-normal"placeholder="" onPointerEnterCapture={() => {}} onPointerLeaveCapture={() => {}}>
                       {modelo}
                     </Typography>
                   </StyledTd>
                   <StyledTd isLast={isLast}>
-                  <Typography variant="small" color="blue-gray" className="font-normal" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                    <Typography variant="small" color="blue-gray" className="font-normal"placeholder="" onPointerEnterCapture={() => {}} onPointerLeaveCapture={() => {}}>
                       {chofer}
                     </Typography>
                   </StyledTd>
                   <StyledTd isLast={isLast}>
-                    <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium text-green-600" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                    <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium text-green-600"placeholder="" onPointerEnterCapture={() => {}} onPointerLeaveCapture={() => {}}>
                       {estado}
                     </Typography>
                   </StyledTd>
                   <StyledTd isLast={isLast}>
                     <div className="flex justify-center">
-                      <ActionButton color="#ecc94b">Editar</ActionButton>
-                      <ActionButton color="#f56565">Eliminar</ActionButton>
+                      <ActionButton color="#ecc94b" onClick={() => handleEdit(_id)}>Editar</ActionButton>
+                      <ActionButton color="#f56565" onClick={() => handleDelete(_id)}>Eliminar</ActionButton>
                     </div>
                   </StyledTd>
                 </tr>
@@ -183,7 +266,12 @@ const Tabla: React.FC = () => {
         </StyledTable>
       </StyledCard>
 
-      <Modal show={showModal} onClose={handleCloseModal} onSubmit={handleSubmit} />
+      <Modal 
+        show={showModal} 
+        onClose={handleCloseModal} 
+        onSubmit={handleSubmit}
+        unidadToEdit={unidadToEdit}
+      />
     </TableContainer>
   );
 };

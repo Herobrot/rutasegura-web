@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { LineChart as MUILineChart, axisClasses } from '@mui/x-charts';
 import { SeriesValueFormatter } from '@mui/x-charts/internals';
+import { format, subWeeks, startOfWeek, endOfWeek } from 'date-fns';
 
 interface DataItem {
   monto: number;
@@ -70,11 +71,50 @@ const ChartContainer = styled.div`
 
 const LineChart: React.FC = () => {
   const [dataset, setDataset] = useState<DataItem[]>(defaultDataset);
+  const [selectedWeek, setSelectedWeek] = useState<string>('');
+
+  const fetchEarnings = async () => {
+    const weeks = [];
+    const end = endOfWeek((new Date() ));
+      const start = startOfWeek((new Date() ));
+      weeks.push({
+        label: `${format(start, 'yyyy-MM-dd')}`,
+        value: `${format(end, 'yyyy-MM-dd')}`,
+      });
+    try {
+      const response = await fetch('https://api.rutasegura.xyz/pasajeros/ganancias/semana', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fechaInicio: weeks[0].label, fechaFin:  weeks[0].value }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      if (data.days && data.earnings && Array.isArray(data.days) && Array.isArray(data.earnings) && data.days.length === data.earnings.length) {
+        const formattedData = data.days.map((day: string, index: number) => ({
+          dia: day,
+          monto: data.earnings[index]
+        }));
+        setDataset(formattedData);
+      } else {
+        console.error('Los datos recibidos no tienen el formato esperado');
+        setDataset(defaultDataset);
+      }
+    } catch (error) {
+      console.error('Error fetching weekly earnings:', error);
+    }
+  };
 
   useEffect(() => {
     
     setTimeout(() => {
-      
+       const [startDate, endDate] = selectedWeek.split('_');
+       fetchEarnings();
       setDataset(defaultDataset); 
     }, 2000);
   }, []);
@@ -86,7 +126,7 @@ const LineChart: React.FC = () => {
     <LineChartContainer id="linechart_id">
       <Header>
         <div>
-          <Title>Ganancias mensuales</Title>
+          <Title>Ganancias Semanales</Title>
           <Subtitle>Gráfico de las ganancias mensuales de la empresa</Subtitle>
         </div>        
       </Header>
