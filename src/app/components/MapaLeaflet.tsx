@@ -8,8 +8,6 @@ import { useUnidad } from "../context/UnidadContext";
 import { useDistancia } from "../context/DistanciaContext";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { set } from "date-fns";
-
 
 const CardContainer = styled.div`
   background-color: white;
@@ -74,6 +72,7 @@ const SmallText = styled.p`
   font-size: 0.875rem;
   color: #718096;
 `;
+
 const customIcon = new L.Icon({
   iconUrl: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
@@ -90,24 +89,26 @@ interface LeafletMapProps {
 const LeafletMap: React.FC<LeafletMapProps> = ({ position }) => {
   const { kits } = useGPS();
   const { fetchUnidad } = useUnidad();
-  const [kitDistancia, setKitDistancia] = useState<any>(useDistancia());
+  const [kitDistancia, setKitDistancia] = useState<any>(null);
   const [unidad, setUnidad] = useState<any>(null);
-  const [closestUnit, setClosestUnit] = useState({
-    lat: 0,
-    long: 0
-  });
+  const [closestUnit, setClosestUnit] = useState<{ lat: number; long: number } | null>(null);
+  console.log(position);
+  console.log(kits);
 
   useEffect(() => {
     if (position && kits.length > 0) {
       let minDistance = Infinity;
       let nearestUnit = null;
-      
+
       kits.forEach(kit => {
         kit.historial.forEach(entry => {
           const lat1 = L.latLng(position[0], position[1]);
           const lat2 = L.latLng(entry.lat, entry.long);
           console.log(lat1);
           const dist = lat1.distanceTo(lat2);
+          console.log(dist);
+          console.log(lat1);
+          console.log(lat2);
           if (dist < minDistance) {
             minDistance = dist;
             nearestUnit = entry;
@@ -119,9 +120,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position }) => {
 
             setKitDistancia({
               _idKit: kit._idKit,
-              distancia:  minDistance}
-            );
-            console.log(kit);
+              distancia: minDistance
+            });
             fetchUnidad(kit._idKit);
             setUnidad(kit);
           }
@@ -131,43 +131,45 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position }) => {
   }, [position, kits]);
 
   return (
-    <><CardContainer>
-      <Header>
-        <Title>
-          <FaRoute style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
-          {unidad ? `Unidad ${unidad._idKit}` : "Unidad no encontrada"}
-        </Title>
-        <Divider />
-      </Header>
-      {unidad ? (
-        <GridContainer>
-          <InfoBlock>
-            <InfoTitle>
-              <FaRoute style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
-              Distancia
-            </InfoTitle>
-            <InfoValue>{kitDistancia ? `${kitDistancia.distancia}m` : 'No se encontró una distancia cercana'} metros</InfoValue>
-          </InfoBlock>
-          <InfoBlock>
-            <InfoTitle>
-              <FaUser style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
-              Chofer
-            </InfoTitle>
-            <InfoValue>{unidad.conductor || "No asignado"}</InfoValue>
-          </InfoBlock>
-        </GridContainer>
-      ) : (
-        <GridContainer>
-          <InfoBlock>
-            <InfoTitle>
-              <FaExclamationTriangle style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
-              Error
-            </InfoTitle>
-            <InfoValue>No se encontró una unidad cercana</InfoValue>
-          </InfoBlock>
-        </GridContainer>
-      )}
-    </CardContainer><div className="h-96 w-full">
+    <>
+      <CardContainer>
+        <Header>
+          <Title>
+            <FaRoute style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
+            {unidad ? `Unidad ${unidad._idKit}` : "Unidad no encontrada"}
+          </Title>
+          <Divider />
+        </Header>
+        {unidad ? (
+          <GridContainer>
+            <InfoBlock>
+              <InfoTitle>
+                <FaRoute style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
+                Distancia
+              </InfoTitle>
+              <InfoValue>{kitDistancia ? `${kitDistancia.distancia}m` : 'No se encontró una distancia cercana'} metros</InfoValue>
+            </InfoBlock>
+            <InfoBlock>
+              <InfoTitle>
+                <FaUser style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
+                Chofer
+              </InfoTitle>
+              <InfoValue>{unidad.conductor || "No asignado"}</InfoValue>
+            </InfoBlock>
+          </GridContainer>
+        ) : (
+          <GridContainer>
+            <InfoBlock>
+              <InfoTitle>
+                <FaExclamationTriangle style={{ marginRight: '0.5rem', color: '#3b82f6' }} />
+                Error
+              </InfoTitle>
+              <InfoValue>No se encontró una unidad cercana</InfoValue>
+            </InfoBlock>
+          </GridContainer>
+        )}
+      </CardContainer>
+      <div className="h-96 w-full">
         {position ? (
           <MapContainer
             center={position}
@@ -190,7 +192,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position }) => {
             <FaMapMarkerAlt className="animate-spin text-4xl text-blue-500" />
           </div>
         )}
-      </div></>
+      </div>
+    </>
   );
 };
 
