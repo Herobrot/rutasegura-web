@@ -1,49 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 import { BarChart, axisClasses } from '@mui/x-charts';
-import { SeriesValueFormatter } from '@mui/x-charts/internals';
-import { format, subWeeks, startOfWeek, endOfWeek } from 'date-fns';
-import CircularProgress from '@mui/material/CircularProgress';
-type DataItem = {
-  monto: number;
-  dia: string;
-}
+import styled from 'styled-components';
 
-
-const defaultDataset: DataItem[] = [
-  { monto: 0, dia: 'Lunes' },
-  { monto: 0, dia: 'Martes' },
-  { monto: 0, dia: 'Miércoles' },
-  { monto: 0, dia: 'Jueves' },
-  { monto: 0, dia: 'Viernes' },
-  { monto: 0, dia: 'Sábado' },
-  { monto: 0, dia: 'Domingo' },
-];
-
-
-const valueFormatter: SeriesValueFormatter<number | null> = (value) => {
-  if (value === null) {
-    return '';
-  }
-  return value.toString();
-};
-
-const chartSetting = {
-  yAxis: [
-    {
-      label: 'Monto',
-    },
-  ],
-  series: [{ dataKey: 'monto', label: 'Ganancias mensuales', valueFormatter }],
-  height: 600,
-  sx: {
-    [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
-      transform: 'translateX(-10px)',
-    },
-  },
-};
-
-const GraficaContainer = styled.div`
+const BarChartContainer = styled.div`
   width: 100%;
   margin-top: 10px;
   padding: 20px;
@@ -70,98 +29,83 @@ const ChartContainer = styled.div`
   width: 100%;
 `;
 
+const defaultDataset = [
+  { hora: '7', monto: 340 },
+  { hora: '8', monto: 940 },
+  { hora: '9', monto: 1640 },
+  { hora: '10', monto: 1180 },
+  { hora: '11', monto: 700 },
+  { hora: '12', monto: 1080 },
+  { hora: '13', monto: 1000 },
+  { hora: '14', monto: 1740 },
+];
 
+const valueFormatter = (value: number) => `$${value}`;
 
-
-
-const LoaderContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 400px;
-`;
+const chartSetting = {
+  yAxis: [
+    {
+      label: 'Monto',
+    },
+  ],
+  series: [{ dataKey: 'monto', label: 'Ganancias por Hora', valueFormatter }],
+  height: 600,
+  sx: {
+    [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
+      transform: 'translateX(-10px)',
+    },
+  },
+};
 
 const Grafica: React.FC = () => {
-  const [dataset, setDataset] = useState<DataItem[]>(defaultDataset);
-  const [loading, setLoading] = useState(true);
-
-  const fetchEarnings = async () => {
-    setLoading(true);
-    const weeks = [];
-    const end = endOfWeek(new Date());
-    const start = startOfWeek(new Date());
-    weeks.push({
-      label: `${format(start, 'yyyy-MM-dd')}`,
-      value: `${format(end, 'yyyy-MM-dd')}`,
-    });
-    try {
-      const response = await fetch('https://api.rutasegura.xyz/pasajeros/ganancias/semana', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ fechaInicio: weeks[0].label, fechaFin: weeks[0].value }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-          const data = await response.json();
-      
-          if (data.days && data.earnings && Array.isArray(data.days) && Array.isArray(data.earnings) && data.days.length === data.earnings.length) {
-            const formattedData = data.days.map((day: string, index: number) => ({
-              dia: day,
-              monto: data.earnings[index]
-            }));
-            setDataset(formattedData);
-          } else {
-            console.error('Los datos recibidos no tienen el formato esperado');
-            setDataset(defaultDataset);
-          }
-        } catch (error) {
-          console.error('Error fetching weekly earnings:', error);
-          setDataset(defaultDataset);
-        } finally {
-          setLoading(false);
-        }
-  };
+  const [dataset, setDataset] = useState(defaultDataset);
 
   useEffect(() => {
-    fetchEarnings();
+    const today = new Date().toISOString();
+
+    fetch('https://api.rutasegura.xyz/pasajeros/ganancias/horas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fecha: today }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const gananciasPorHora = data.gananciasPorHora;
+        const updatedDataset = Object.keys(gananciasPorHora).map((hora) => ({
+          hora: `${hora}:00`,
+          monto: gananciasPorHora[hora],
+        }));
+        setDataset(updatedDataset);
+      })
+      .catch(() => {
+        setDataset(defaultDataset);
+      });
   }, []);
 
-  const tickPlacement = 'middle';
-  const tickLabelPlacement = 'middle';
-
   return (
-    <GraficaContainer id="grafica_id">
+    <BarChartContainer>
       <Header>
         <div>
-          <Title>Ganancias mensuales</Title>
-          <Subtitle>Gráfico de las ganancias mensuales de la empresa</Subtitle>
+          <Title>Ganancias por Hora</Title>
+          <Subtitle>Gráfico de las ganancias por hora</Subtitle>
         </div>
       </Header>
       <ChartContainer>
-        {loading ? (
-          <LoaderContainer>
-            <CircularProgress />
-          </LoaderContainer>
-        ) : (
-          <BarChart
-            dataset={dataset}
-            xAxis={[
-              {
-                scaleType: 'band',
-                dataKey: 'dia',
-                tickPlacement,
-                tickLabelPlacement,
-              },
-            ]}          
-            {...chartSetting}
-          />
-        )}
+        <BarChart
+          dataset={dataset as unknown as any}
+          xAxis={[
+            {
+              scaleType: 'band',
+              dataKey: 'hora',
+            },
+          ]}
+          {...chartSetting}
+          loading={!dataset || dataset.length === 0}
+        />
       </ChartContainer>
-    </GraficaContainer>
+    </BarChartContainer>
   );
 };
 

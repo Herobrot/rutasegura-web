@@ -106,6 +106,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position }) => {
         kit.historial.forEach(entry => {
           const lat1 = L.latLng(position[0], position[1]);
           const lat2 = L.latLng(entry.lat, entry.long);
+          console.log(lat1);
           const dist = lat1.distanceTo(lat2);
           if (dist < minDistance) {
             minDistance = dist;
