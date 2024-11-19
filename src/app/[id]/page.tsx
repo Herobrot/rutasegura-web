@@ -15,4 +15,12 @@ const App = () => {
   );
 };
 
+export async function GET(req: any, {params}: any) {
+  return new Response(`${params.token}-${Math.random().toString()}`)
+}
+
+export function generateStaticParams() {
+  return [{token: "1"}, {token: "2"}, {token: "3"}, {token: "4"}]
+}
+
 export default App;
