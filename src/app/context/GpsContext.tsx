@@ -33,7 +33,7 @@ export const GPSProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 
   const fetchGPSData = async () => {
     try {
-      const response = await fetch('https://api.rutasegura.xyz/kits/gps/historial');
+      const response = await fetch('http://35.153.187.71/kits/gps/historial');
       const data = await response.json();
       setKits(data.unidades);
     } catch (error) {

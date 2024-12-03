@@ -82,7 +82,7 @@ const LineChart: React.FC = () => {
         value: `${format(end, 'yyyy-MM-dd')}`,
       });
     try {
-      const response = await fetch('https://api.rutasegura.xyz/pasajeros/ganancias/semana', {
+      const response = await fetch('http://35.153.187.71/pasajeros/ganancias/semana', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

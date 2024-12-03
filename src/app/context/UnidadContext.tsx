@@ -34,7 +34,7 @@ export const UnidadProvider: React.FC<{children: ReactNode}> = ({ children }) =>
     };
     console.log(_idKit);
     try {
-      const response = await fetch(`https://api.rutasegura.xyz/unidades/kit/${_idKit}`);
+      const response = await fetch(`http://35.153.187.71/unidades/kit/${_idKit}`);
       const data = await response.json();
       setUnidad(data.unidad);
       return data.unidad;
