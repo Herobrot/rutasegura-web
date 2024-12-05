@@ -53,7 +53,7 @@ const DriverDashboard: React.FC<DriverDashboardProps> = ({ id }) => {
 
   const fetchDriverInfo = async (driverId: string) => {
     try {
-      const response = await fetch(`http://35.153.187.71/users/info/${driverId}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/users/info/${driverId}`);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -69,7 +69,7 @@ const DriverDashboard: React.FC<DriverDashboardProps> = ({ id }) => {
 
   const fetchEarnings = async (startDate: string, endDate: string) => {
     try {
-      const response = await fetch('http://35.153.187.71/pasajeros/ganancias/semana', {
+      const response = await fetch(process.env.NEXT_PUBLIC_APIURL+'/pasajeros/ganancias/semana', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

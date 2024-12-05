@@ -28,7 +28,7 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://35.153.187.71/pasajeros/ganancias/mes-actual');
+        const response = await fetch(process.env.NEXT_PUBLIC_APIURL+'/pasajeros/ganancias/mes-actual');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

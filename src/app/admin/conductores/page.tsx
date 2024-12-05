@@ -24,7 +24,7 @@ const ConductoresManager: React.FC = () => {
 
   const fetchConductores = async () => {
     try {
-      const response = await fetch('http://35.153.187.71/users/drivers');
+      const response = await fetch(process.env.NEXT_PUBLIC_APIURL+'/users/drivers');
       if (!response.ok) throw new Error('Error al cargar conductores');
       const data = await response.json();
       setConductores(data);
@@ -38,7 +38,7 @@ const ConductoresManager: React.FC = () => {
 
   const handleCreate = async (newConductor: Omit<Conductor, '_id'>) => {
     try {
-      const response = await fetch('http://35.153.187.71/users/create', {
+      const response = await fetch(process.env.NEXT_PUBLIC_APIURL+'/users/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newConductor),
@@ -55,7 +55,7 @@ const ConductoresManager: React.FC = () => {
 
   const handleUpdate = async (updatedConductor: Conductor) => {
     try {
-      const response = await fetch(`http://35.153.187.71/users/users/${updatedConductor._id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/users/users/${updatedConductor._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedConductor),
@@ -85,7 +85,7 @@ const ConductoresManager: React.FC = () => {
       });
 
       if (result.isConfirmed) {
-        const response = await fetch(`http://35.153.187.71/users/users/${id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/users/users/${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) throw new Error('Error al eliminar conductor');
