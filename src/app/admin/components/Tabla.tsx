@@ -116,7 +116,7 @@ const Tabla: React.FC = () => {
   const fetchVehiculos = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("https://api.rutasegura.xyz/unidades");
+      const response = await fetch(process.env.NEXT_PUBLIC_APIURL+"/unidades");
       if (!response.ok) {
         throw new Error('Error en la respuesta del servidor');
       }
@@ -161,7 +161,7 @@ const Tabla: React.FC = () => {
       });
   
       if (result.isConfirmed) {
-        const response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/unidades/unidad/${id}`, {
           method: 'DELETE',
         });
   
@@ -190,7 +190,7 @@ const handleSubmit = async (unidad: Omit<Unidad, '_id' | 'estado'>) => {
   try {
     let response;
     if (unidadToEdit) {
-      response = await fetch(`https://api.rutasegura.xyz/unidades/unidad/${unidadToEdit.placa}`, {
+      response = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/unidades/unidad/${unidadToEdit.placa}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ const handleSubmit = async (unidad: Omit<Unidad, '_id' | 'estado'>) => {
         body: JSON.stringify(unidad),
       });
     } else {
-      response = await fetch("https://api.rutasegura.xyz/unidades", {
+      response = await fetch(process.env.NEXT_PUBLIC_APIURL+"/unidades", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
